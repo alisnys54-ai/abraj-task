@@ -58,7 +58,7 @@ GET|POST /projects/:key/bookings PATCH /projects/:key/bookings/:id/{confirm|canc
 GET  /projects/:key/installments POST /projects/:key/installments/:id/pay
 GET|POST /projects/:key/site-reports
 GET|POST /projects/:key/tickets  PATCH /projects/:key/tickets/:id
-GET  /file-hub                   GET /file-hub/summary
+GET  /file-hub                   GET /file-hub/summary                GET /activity-logs
 GET  /attachments                POST /tasks/:id/attachments/base64   GET /attachments/:id/file
 ```
 
