@@ -8,6 +8,6 @@ import { DashboardCacheModule } from './dashboard-cache.module';
   imports: [DashboardCacheModule],
   controllers: [DashboardController],
   providers: [DashboardService, DashboardRepository],
-  exports: [DashboardService],
+  exports: [DashboardService, DashboardRepository],
 })
 export class DashboardModule {}

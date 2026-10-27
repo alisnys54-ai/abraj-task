@@ -4,11 +4,12 @@
   "private": true,
   "description": "Abraj Al Yasir Tasks — backend API. Phase 4: Task Management Engine.",
   "scripts": {
-    "build": "nest build",
+    "build": "nest build && tsc -p tsconfig.seed.json",
     "start": "node dist/main",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
+    "seed": "ts-node scripts/seed.ts",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",

@@ -6,7 +6,8 @@
 # Required environment variables to set in the Railway service dashboard —
 # none are defined here since secrets don't belong in a committed file:
 #   DATABASE_URL                    (Railway Postgres plugin provides this automatically)
-#   REDIS_HOST / REDIS_PORT         (Railway Redis plugin — read its connection fields)
+#   REDIS_URL                       (reference the Railway Redis plugin: ${{Redis.REDIS_URL}} —
+#                                    it carries the password; REDIS_HOST/REDIS_PORT alone fail with NOAUTH)
 #   JWT_ACCESS_PRIVATE_KEY_BASE64   (from: bash scripts/generate-jwt-keys.sh)
 #   JWT_ACCESS_PUBLIC_KEY_BASE64
 #   NODE_ENV=production

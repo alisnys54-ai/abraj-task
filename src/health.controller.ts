@@ -37,6 +37,9 @@ export class HealthController {
       const redis = new Redis({
         host: this.config.get<string>('redis.host', 'localhost'),
         port: this.config.get<number>('redis.port', 6379),
+        username: this.config.get<string>('redis.username'),
+        password: this.config.get<string>('redis.password'),
+        family: 0,
         lazyConnect: true,
         connectTimeout: 1500,
         maxRetriesPerRequest: 0,

@@ -65,7 +65,7 @@ GET  /attachments                POST /tasks/:id/attachments/base64   GET /attac
 ## Running it
 
 ```bash
-cp .env.example .env              # set DATABASE_URL, REDIS_URL, JWT keys
+cp .env.example .env              # set DATABASE_URL, REDIS_URL (or REDIS_HOST/PORT/PASSWORD), JWT keys
 npm ci
 npx prisma db push                # creates the new tables (additive)
 npm run seed                      # roles, permissions, projects, sites, unit types, plants
@@ -76,3 +76,26 @@ npm run start:dev
 Demo users are `*@demo.abraj` (for example `fatima@demo.abraj` is a department manager, `ali@demo.abraj` a sales officer for Riyasa only). Do not enable `SEED_DEMO_DATA` in production.
 
 Frontend: set `NEXT_PUBLIC_API_URL` and `NEXT_PUBLIC_WS_URL`, then `npm ci && npm run build`.
+
+## Deploying on Railway
+
+The API deploys from `railway.toml` (Dockerfile build, healthcheck `/api/v1/health`).
+On every start `docker/entrypoint.sh` runs `prisma db push`, then the compiled seed
+(`dist/scripts/seed.js`, built by `npm run build`), then the API.
+
+1. Add the **Postgres** and **Redis** plugins to the project.
+2. On the API service set:
+
+| Variable | Value |
+|---|---|
+| `DATABASE_URL` | `${{Postgres.DATABASE_URL}}` |
+| `REDIS_URL` | `${{Redis.REDIS_URL}}` (includes the password Railway Redis requires) |
+| `JWT_ACCESS_PRIVATE_KEY_BASE64` / `JWT_ACCESS_PUBLIC_KEY_BASE64` | from `bash scripts/generate-jwt-keys.sh` |
+| `NODE_ENV` | `production` |
+| `CORS_ORIGIN` | the frontend origin, e.g. `https://<site>.netlify.app` |
+| `SYSTEM_OWNER_EMAIL` / `SYSTEM_OWNER_PASSWORD` | a real password, not the default |
+
+3. Deploy, then check `GET /api/v1/health/ready` returns `{"status":"ready"}` (database and Redis both `ok`).
+
+`prisma db push` runs with `--accept-data-loss`. The unified-platform schema is additive, but
+take a database backup before deploying any later schema change that drops or renames a column.

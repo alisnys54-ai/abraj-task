@@ -3,7 +3,7 @@ import { Job, Queue } from 'bullmq';
 import { Logger } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
-import { TASK_REMINDERS_QUEUE } from './scheduler.module';
+import { TASK_REMINDERS_QUEUE } from './scheduler.constants';
 import { TERMINAL_TASK_STATUSES } from '../../common/constants/task.constants';
 
 interface ReminderJobData {

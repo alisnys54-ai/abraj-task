@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
-import { TASK_REMINDERS_QUEUE } from './scheduler.module';
+import { TASK_REMINDERS_QUEUE } from './scheduler.constants';
 
 export type ReminderKind = 'reminder' | 'due' | 'overdue';
 
