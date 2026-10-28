@@ -48,7 +48,7 @@ function resolveKey(envBase64Var: string, envPathVar: string, defaultPath: strin
  * redis://default:secret@redis.railway.internal:6379) wins when set; otherwise
  * the separate REDIS_HOST / REDIS_PORT / REDIS_USERNAME / REDIS_PASSWORD vars.
  * Managed Redis on Railway always requires a password, so host + port alone
- * fail with NOAUTH there.
+ * fail with NOAUTH there. A rediss:// URL (Upstash, most hosted Redis) turns on TLS.
  */
 function resolveRedis() {
   const url = process.env.REDIS_URL?.trim();
@@ -59,6 +59,7 @@ function resolveRedis() {
       port: parseInt(parsed.port || '6379', 10),
       username: parsed.username ? decodeURIComponent(parsed.username) : undefined,
       password: parsed.password ? decodeURIComponent(parsed.password) : undefined,
+      tls: parsed.protocol === 'rediss:',
     };
   }
   return {
@@ -66,6 +67,7 @@ function resolveRedis() {
     port: parseInt(process.env.REDIS_PORT ?? '6379', 10),
     username: process.env.REDIS_USERNAME || undefined,
     password: process.env.REDIS_PASSWORD || undefined,
+    tls: process.env.REDIS_TLS === 'true',
   };
 }
 
