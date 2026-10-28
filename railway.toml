@@ -1,0 +1,25 @@
+# Railway deployment config.
+# Railway auto-detects this file at the repo root. Build context is the repo
+# root (matches docker-compose.yml's `context: .`); the Dockerfile itself
+# lives under docker/ so it's referenced explicitly below.
+#
+# Required environment variables to set in the Railway service dashboard —
+# none are defined here since secrets don't belong in a committed file:
+#   DATABASE_URL                    (Railway Postgres plugin provides this automatically)
+#   REDIS_URL                       (reference the Railway Redis plugin: ${{Redis.REDIS_URL}} —
+#                                    it carries the password; REDIS_HOST/REDIS_PORT alone fail with NOAUTH)
+#   JWT_ACCESS_PRIVATE_KEY_BASE64   (from: bash scripts/generate-jwt-keys.sh)
+#   JWT_ACCESS_PUBLIC_KEY_BASE64
+#   NODE_ENV=production
+#   CORS_ORIGIN                     (your real frontend origin, once it exists)
+#   SYSTEM_OWNER_PASSWORD           (do not run this in production with the published default)
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "docker/Dockerfile"
+
+[deploy]
+healthcheckPath = "/api/v1/health"
+healthcheckTimeout = 100
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3
