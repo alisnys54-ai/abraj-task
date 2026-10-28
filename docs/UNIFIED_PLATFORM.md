@@ -97,5 +97,6 @@ On every start `docker/entrypoint.sh` runs `prisma db push`, then the compiled s
 
 3. Deploy, then check `GET /api/v1/health/ready` returns `{"status":"ready"}` (database and Redis both `ok`).
 
-`prisma db push` runs with `--accept-data-loss`. The unified-platform schema is additive, but
-take a database backup before deploying any later schema change that drops or renames a column.
+`prisma db push` runs without `--accept-data-loss`: a schema change that would drop data makes the
+deploy fail (the previous deployment keeps serving) instead of deleting it. The unified-platform
+schema is additive, so it applies cleanly.

@@ -9,6 +9,11 @@ set -e
 # prisma/migrations folder once the schema stabilizes and versioned
 # migrations are wanted.
 #
+# No --accept-data-loss: if a schema change would drop a column or table that
+# holds data, `db push` refuses and the deploy fails while the previous one
+# keeps serving, instead of the data being deleted. Back up, then apply that
+# change deliberately.
+#
 # Retries below exist because on Railway/Render the database and app are
 # separate services with no guaranteed startup ordering — the app container
 # can easily start seconds before Postgres is actually accepting connections.
@@ -19,10 +24,10 @@ SEED_MAX_ATTEMPTS=8
 
 echo "[entrypoint] Applying database schema..."
 attempt=0
-until npx prisma db push --skip-generate --accept-data-loss; do
+until npx prisma db push --skip-generate; do
   attempt=$((attempt + 1))
   if [ "$attempt" -ge "$DB_MAX_ATTEMPTS" ]; then
-    echo "[entrypoint] Database still unreachable after $DB_MAX_ATTEMPTS attempts — aborting startup."
+    echo "[entrypoint] Schema not applied after $DB_MAX_ATTEMPTS attempts (database unreachable, or the change would lose data — see the error above) — aborting startup."
     exit 1
   fi
   echo "[entrypoint] Database not ready yet (attempt $attempt/$DB_MAX_ATTEMPTS) — retrying in 3s..."
