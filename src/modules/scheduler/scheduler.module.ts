@@ -21,6 +21,7 @@ export { TASK_REMINDERS_QUEUE };
           password: config.get<string>('redis.password'),
           // 0 = resolve IPv4 or IPv6; Railway's private network is IPv6-only.
           family: 0,
+          ...(config.get<boolean>('redis.tls') ? { tls: {} } : {}),
         },
       }),
     }),

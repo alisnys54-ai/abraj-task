@@ -40,6 +40,7 @@ export class HealthController {
         username: this.config.get<string>('redis.username'),
         password: this.config.get<string>('redis.password'),
         family: 0,
+        ...(this.config.get<boolean>('redis.tls') ? { tls: {} } : {}),
         lazyConnect: true,
         connectTimeout: 1500,
         maxRetriesPerRequest: 0,
