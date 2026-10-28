@@ -49,7 +49,7 @@ services:
         sync: false
       - key: JWT_ACCESS_PUBLIC_KEY_BASE64
         sync: false
-      - key: CORS_ORIGIN
+      - key: CORS_ORIGIN # comma-separated frontend origins
         sync: false
       - key: SYSTEM_OWNER_EMAIL
         sync: false

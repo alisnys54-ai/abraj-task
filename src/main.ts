@@ -26,9 +26,11 @@ async function bootstrap() {
 
   // credentials:true with a wildcard origin is invalid per the CORS spec (browsers
   // reject it) and is also unneeded for a bearer-token API — only enable it when a
-  // real origin is configured.
+  // real origin is configured. CORS_ORIGIN may list several origins, comma-separated
+  // (e.g. the Netlify subdomain and the custom domain).
   const corsOrigin = config.get<string>('corsOrigin', '*');
-  app.enableCors({ origin: corsOrigin, credentials: corsOrigin !== '*' });
+  const origins = corsOrigin.split(',').map((o) => o.trim()).filter(Boolean);
+  app.enableCors({ origin: corsOrigin === '*' ? '*' : origins, credentials: corsOrigin !== '*' });
 
   app.enableVersioning({ type: VersioningType.URI, defaultVersion: '1' });
   app.setGlobalPrefix(config.get<string>('apiPrefix', 'api'));
